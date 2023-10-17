@@ -122,6 +122,8 @@ int main()
 	GUI::Setup(OnGui);
 	GUI::onExitFunc = OnExit;
 
+	ImGui::GetIO().IniFilename = nullptr;
+
 	//planes.push_back(Plane({ 0.2, 0.8 }, {0.01, -0.006}));
 	planes.push_back(Plane({ 0.62, 0.63 }, {-0.008, 0.002}, "Plane001"));
 	planes.push_back(Plane({ 0.2, 0.2 }, {-0.001, 0.006}, "Plane002"));
