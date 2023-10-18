@@ -174,7 +174,7 @@ int main()
 		
 	while (!hasExited)
 	{
-		UpdatePlanesPositions(planes, lastFrameRenderTime / 1000.f * !isRadarStopped);
+		UpdatePlanesPositions(planes, selectedPlane, lastFrameRenderTime / 1000.f * !isRadarStopped);
 
 		if (GUI::DrawGui())
 			break;

@@ -2,13 +2,15 @@
 
 #define sign(x) (x == 0 ? 0 : x < 0 ? -1 : 1)
 
-void UpdatePlanesPositions(std::vector<Plane*>& planes, float deltaTime)
+void UpdatePlanesPositions(std::vector<Plane*>& planes, int &selectedPlane, float deltaTime)
 {
 	for (int i = 0; i < planes.size(); i++)
 	{
 		planes[i]->position += planes[i]->velocity * deltaTime/1000;
 
 		if (sign((planes[i]->flightPlan->endAirport->position-planes[i]->position).x) != sign(planes[i]->velocity.x)) {
+			if (planes[i]->isSelected)
+				selectedPlane = -1;
 			planes.erase(planes.begin() + i);
 			i--;
 		}
