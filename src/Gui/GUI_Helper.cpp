@@ -93,11 +93,15 @@ void DrawRadar(std::vector<Plane*>& planes, std::vector<Airport*>& airports, flo
 	// Draw Spotted Planes / Spot Planes
 	for (int i = 0; i < planes.size(); i++)
 	{
+#ifdef RADAR_FADING_PLANES
 		if ((planes[i]->radarAge -= deltaTime) > 0) {
-			if (planes[i]->radarAge - PLANE_RADAR_MAX_AGE > 0)
+			if (planes[i]->radarAge - PLANE_RADAR_MAX_AGE > 0) // Wait delay used to sync visuals
 				continue;
+#else
+		if (planes[i]->radarAge) {
+#endif
 
-			
+
 			if (selectedPlane) {
 				if ((planes[i]->_spottedPos + Vec2(beginPos.x + RADAR_HALF_MARGIN, beginPos.y + RADAR_HALF_MARGIN)).dist(ImGui::GetMousePos()) < RADAR_SELECT_MARK_SIZE)
 				{
@@ -109,7 +113,7 @@ void DrawRadar(std::vector<Plane*>& planes, std::vector<Airport*>& airports, flo
 				}
 			}
 
-
+#ifdef RADAR_FADING_PLANES
 			float opacity = planes[i]->radarAge / PLANE_RADAR_MAX_AGE;
 			if (planes[i]->isHovered)
 				dl->AddCircleFilled(planes[i]->_spottedPos + Vec2(beginPos.x + RADAR_HALF_MARGIN, beginPos.y + RADAR_HALF_MARGIN), 10, ImColor(0.4f, 1.f, 0.4f, opacity));
@@ -118,17 +122,38 @@ void DrawRadar(std::vector<Plane*>& planes, std::vector<Airport*>& airports, flo
 
 			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(RADAR_TEXT_COLOR, opacity));
 
-			auto startPos = planes[i]->_spottedPos + RADAR_HALF_MARGIN + ImGui::WindowPosRelToAbs(ImGui::GetCurrentWindow(), {0,0});
-			ImGui::RenderTextClipped({ startPos.x-100, startPos.y-50 }, { startPos.x + 100, startPos.y + 100 }, planes[i]->identifier, nullptr, nullptr, {0.5, 0.5});
+			auto startPos = planes[i]->_spottedPos + RADAR_HALF_MARGIN + ImGui::WindowPosRelToAbs(ImGui::GetCurrentWindow(), { 0,0 });
+			ImGui::RenderTextClipped({ startPos.x - 100, startPos.y - 50 }, { startPos.x + 100, startPos.y + 100 }, planes[i]->identifier, nullptr, nullptr, { 0.5, 0.5 });
 
 			// Draw Rectangle Mark
-			if(planes[i]->isSelected)
+			if (planes[i]->isSelected)
 				DrawElementMark(startPos, ImColor(RADAR_SELECT_MARK_COLOR, opacity), dl, true);
 
 			ImGui::PopStyleColor();
 
 			continue;
 		}
+#else
+			if (planes[i]->isHovered)
+				dl->AddCircleFilled(planes[i]->_spottedPos + Vec2(beginPos.x + RADAR_HALF_MARGIN, beginPos.y + RADAR_HALF_MARGIN), 10, ImColor(0.4f, 1.f, 0.4f, 1.f));
+			else
+				dl->AddCircleFilled(planes[i]->_spottedPos + Vec2(beginPos.x + RADAR_HALF_MARGIN, beginPos.y + RADAR_HALF_MARGIN), 10, ImColor(0.1f, 0.95f, 0.1f, 1.f));
+
+			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(RADAR_TEXT_COLOR, 1.f));
+
+			auto startPos = planes[i]->_spottedPos + RADAR_HALF_MARGIN + ImGui::WindowPosRelToAbs(ImGui::GetCurrentWindow(), { 0,0 });
+			ImGui::RenderTextClipped({ startPos.x - 100, startPos.y - 50 }, { startPos.x + 100, startPos.y + 100 }, planes[i]->identifier, nullptr, nullptr, { 0.5, 0.5 });
+
+			// Draw Rectangle Mark
+			if (planes[i]->isSelected)
+				DrawElementMark(startPos, ImColor(RADAR_SELECT_MARK_COLOR, 1.f), dl, true);
+
+			ImGui::PopStyleColor();
+
+			if ((planes[i]->radarAge -= deltaTime) > 500)
+				continue;
+		}
+#endif
 		
 		// distance between a line (ax = y) and a point (x,y) in 2D space
 		// D = |(-a * x) + y| / sqrt(a^2 + 1)

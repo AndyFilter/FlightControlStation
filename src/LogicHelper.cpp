@@ -11,6 +11,8 @@ void UpdatePlanesPositions(std::vector<Plane*>& planes, int &selectedPlane, floa
 		if (sign((planes[i]->flightPlan->endAirport->position-planes[i]->position).x) != sign(planes[i]->velocity.x)) {
 			if (planes[i]->isSelected)
 				selectedPlane = -1;
+			if (i < selectedPlane)
+				selectedPlane--;
 			delete planes[i];
 			planes.erase(planes.begin() + i);
 			i--;

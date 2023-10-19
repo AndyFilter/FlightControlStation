@@ -18,6 +18,8 @@
 #define RADAR_ANGULAR_SPEED 3
 #define RADAR_AIRPORT_SIZE 15
 
+//#define RADAR_FADING_PLANES
+
 // Default size is RADAR_SIZExRADAR_SIZE;
 void DrawRadar(std::vector<Plane*>& planes, std::vector<Airport*>& airports, float deltaTime, \
 	int* selectedPlane = nullptr, int* selectedAirport = nullptr);
