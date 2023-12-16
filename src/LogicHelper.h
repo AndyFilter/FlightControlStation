@@ -2,6 +2,10 @@
 
 #include "Definitions.h"
 
+#include "Definitions/Airport.h"
+#include "Definitions/Plane.h"
+#include "Definitions/FlightPlan.h"
+
 #include <vector>
 
 // delta time passed as milliseconds

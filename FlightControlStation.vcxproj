@@ -76,6 +76,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -142,6 +143,16 @@
     <ClInclude Include="src\Gui\gui.h" />
     <ClInclude Include="src\Gui\GUI_Helper.h" />
     <ClInclude Include="src\LogicHelper.h" />
+    <ClInclude Include="src\Definitions\AcceptanceSystem.h" />
+    <ClInclude Include="src\Definitions\Airport.h" />
+    <ClInclude Include="src\Definitions\Archive.h" />
+    <ClInclude Include="src\Definitions\EmergencySystem.h" />
+    <ClInclude Include="src\Definitions\FlightPlan.h" />
+    <ClInclude Include="src\Definitions\FlightRaport.h" />
+    <ClInclude Include="src\Definitions\Pilot.h" />
+    <ClInclude Include="src\Definitions\Plane.h" />
+    <ClInclude Include="src\Definitions\Raport.h" />
+    <ClInclude Include="src\Definitions\RaportCreator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\External\ImGui\imgui.cpp" />
@@ -154,6 +165,16 @@
     <ClCompile Include="src\Gui\gui.cpp" />
     <ClCompile Include="src\Gui\GUI_Helper.cpp" />
     <ClCompile Include="src\LogicHelper.cpp" />
+    <ClCompile Include="src\Definitions\AcceptanceSystem.cpp" />
+    <ClCompile Include="src\Definitions\Airport.cpp" />
+    <ClCompile Include="src\Definitions\Archive.cpp" />
+    <ClCompile Include="src\Definitions\EmergencySystem.cpp" />
+    <ClCompile Include="src\Definitions\FlightPlan.cpp" />
+    <ClCompile Include="src\Definitions\FlightRaport.cpp" />
+    <ClCompile Include="src\Definitions\Pilot.cpp" />
+    <ClCompile Include="src\Definitions\Plane.cpp" />
+    <ClCompile Include="src\Definitions\Raport.cpp" />
+    <ClCompile Include="src\Definitions\RaportCreator.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

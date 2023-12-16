@@ -3,6 +3,11 @@
 #include "Definitions.h"
 #include "LogicHelper.h"
 
+#include "Definitions/Airport.h"
+#include "Definitions/Plane.h"
+#include "Definitions/Pilot.h"
+#include "Definitions/FlightPlan.h"
+
 #include <vector>
 #include <chrono>
 #include <time.h>

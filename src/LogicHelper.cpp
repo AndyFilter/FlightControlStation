@@ -2,6 +2,7 @@
 
 #define sign(x) (x == 0 ? 0 : x < 0 ? -1 : 1)
 
+// Euler velocity/position method
 void UpdatePlanesPositions(std::vector<Plane*>& planes, int &selectedPlane, float deltaTime)
 {
 	for (int i = 0; i < planes.size(); i++)
