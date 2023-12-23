@@ -7,11 +7,18 @@ using namespace std;
 #include "Pilot.h"
 #include "Plane.h"
 
-void AcceptanceSystem::submitFlightPlan(Pilot pilot, Plane plane, Airport* st, Airport* dst, Airport* emg[] ) {
+void AcceptanceSystem::submitFlightPlan(Pilot* pilot, Plane* plane, Airport* st, Airport* dst, std::vector<Airport*> emg) {
+	queued++;
 	throw "Not yet implemented";
 }
 
+void AcceptanceSystem::submitFlightPlan(Pilot* pilot, Plane* plane, Airport* st, Airport* dst) {
+	queued++;
+	//throw "Not yet implemented";
+}
+
 void AcceptanceSystem::addFlightPlan(FlightPlan fp) {
+	queued--;
 	throw "Not yet implemented";
 }
 

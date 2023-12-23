@@ -7,7 +7,7 @@
 
 #include <vector>
 
-#define RADAR_SIZE 550 // Only divisible by 50
+#define RADAR_SIZE 600 // Only divisible by 50
 #define RADAR_SIZE_MARGIN 100 // Only divisible by 50*2
 #define RADAR_OUTER_SIZE (RADAR_SIZE_MARGIN+RADAR_SIZE)
 #define RADAR_CIRCLES 6

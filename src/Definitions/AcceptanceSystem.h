@@ -1,5 +1,5 @@
 #include <exception>
-#include <vector>
+#include <queue>
 //using namespace std;
 
 #ifndef __AcceptanceSystem_h__
@@ -16,17 +16,30 @@ class Plane;
 class Airport;
 class AcceptanceSystem;
 
+// SINGLETON
 class AcceptanceSystem
 {
 	public:
-		std::vector<FlightPlan*> flightplans;
+		std::queue<FlightPlan*> flightplans;
+		int queued = 0;
 
-		void submitFlightPlan(Pilot pilot, Plane plane, Airport* st, Airport* dst, Airport* emg[] );
+		void submitFlightPlan(Pilot* pilot, Plane* plane, Airport* st, Airport* dst);
+		void submitFlightPlan(Pilot* pilot, Plane* plane, Airport* st, Airport* dst, std::vector<Airport*> emg);
 		void addFlightPlan(FlightPlan fp);
-	private:
-		FlightPlan* FPVector[];
+
+		// Get singleton
+		static AcceptanceSystem* Instance() {
+			static AcceptanceSystem* singleton;
+			if (!singleton)
+				singleton = new AcceptanceSystem();
+
+			return singleton;
+		}
 
 		void verify();
+
+	private:
+		std::queue<FlightPlan*> FPVector;
 };
 
 #endif

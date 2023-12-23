@@ -12,7 +12,7 @@ namespace GUI
 
 	inline bool (*onExitFunc)();
 
-	static int windowX = 1080, windowY = 705;
+	static int windowX = 1280, windowY = 756;
 }
 
 #define TOOLTIP(...)					\

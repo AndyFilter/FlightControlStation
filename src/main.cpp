@@ -7,6 +7,7 @@
 #include "Definitions/Plane.h"
 #include "Definitions/Pilot.h"
 #include "Definitions/FlightPlan.h"
+#include "Definitions/AcceptanceSystem.h"
 
 #include <vector>
 #include <chrono>
@@ -27,11 +28,12 @@ uint64_t lastFrameRenderTime = 0; // in microseconds
 // UI Controls
 bool isRadarStopped = false;
 
+// MOVED TO LogicHelper.h
 // Functional Data
-static std::vector<Plane*> planes;
-static std::vector<Airport*> airports;
-static int selectedPlane = -1;
-static int selectedAirport = -1;
+//static std::vector<Plane*> planes;
+//static std::vector<Airport*> airports;
+//static int selectedPlane = -1;
+//static int selectedAirport = -1;
 
 int OnGui()
 {
@@ -50,7 +52,7 @@ int OnGui()
 	if (ImGui::Button("Stop the radar"))
 		isRadarStopped = !isRadarStopped;
 	if (ImGui::Button("Generate Flight")) {
-		Plane* plane = GenerateFlight(airports);
+		Plane* plane = GenerateFlight();
 		planes.push_back(plane);
 	}
 
@@ -175,11 +177,18 @@ int main()
 	airports.push_back(new Airport({ 0.2, 0.76 }, "AP-003"));
 	airports.push_back(new Airport({ 0.25, 0.15 }, "AP-004"));
 
+	//pilots.push_back(new Pilot("Adam", "Bialy", 32));
+	//pilots.push_back(new Pilot("Robert", "Xd", 12));
+	//pilots.push_back(new Pilot("Tomasz", "Dzialowy", 44));
+
 	auto frameStartRender = micros();
 		
 	while (!hasExited)
 	{
-		UpdatePlanesPositions(planes, selectedPlane, lastFrameRenderTime / 1000.f * !isRadarStopped);
+		float dt = lastFrameRenderTime / 1000.f * !isRadarStopped;
+		UpdatePlanesPositions(dt);
+
+		LogicTick(dt);
 
 		if (GUI::DrawGui())
 			break;
