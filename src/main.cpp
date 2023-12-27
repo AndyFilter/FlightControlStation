@@ -1,4 +1,4 @@
-#include "Gui/gui.h"
+﻿#include "Gui/gui.h"
 #include "Gui/GUI_Helper.h"
 #include "Definitions.h"
 #include "LogicHelper.h"
@@ -20,6 +20,7 @@ inline uint64_t micros() {
 
 long long Plane::count = 1;
 long long Airport::count = 0;
+long Pilot::count = 0;
 
 // Program Internal Data
 static bool hasExited = false;
@@ -42,23 +43,27 @@ int OnGui()
 
 	float dT = lastFrameRenderTime / 1000.f;
 
-	DrawRadar(planes, airports, dT * !isRadarStopped, &selectedPlane, &selectedAirport);
+	DrawRadar(planes, airports, dT * !isRadarStopped, selectedPlane, &selectedAirport);
 
 	ImGui::SameLine();
 
 	auto avail = ImGui::GetContentRegionAvail();
 
 	ImGui::BeginGroup();
+	if (ImGui::Button("Generate Flight")) {
+		GenerateFlight();
+		//Plane* plane = GenerateFlight();
+		//planes.push_back(plane);
+	}
+	ImGui::SameLine();
 	if (ImGui::Button("Stop the radar"))
 		isRadarStopped = !isRadarStopped;
-	if (ImGui::Button("Generate Flight")) {
-		Plane* plane = GenerateFlight();
-		planes.push_back(plane);
-	}
 
 	ImGui::BeginGroup();
 
 	//ImGui::SetNextItemWidth((avail.x - style.ItemSpacing.x) / 2);
+#pragma region SAMOLOTY
+	/*
 	ImGui::Text("Samoloty");
 	if (ImGui::BeginChild("##PlanesTable", { (avail.x - style.ItemSpacing.x) / 2, 200}, true))
 	{
@@ -83,6 +88,37 @@ int OnGui()
 				planes[i]->isSelected = false;
 		}
 	}
+	*/
+#pragma endregion SAMOLOTY
+
+	ImGui::Text("Loty");
+	if (ImGui::BeginChild("##FlightsTable", { (avail.x - style.ItemSpacing.x) / 2, 200}, true))
+	{
+		//ImGui::ListBox("##PlanesTable", &selectedPlane, [](void* data, int idx) { return (const char*)planes[idx].identifier; }, planes.data(), (int)planes.size());
+		for (int i = 0; i < flightplans.size(); i++)
+		{
+			char label[24];
+			sprintf_s(label, "Plan%03d", i + 1);
+			if (ImGui::Selectable(label, selectedPlan == i)) {
+				if (selectedPlan == i)
+					selectedPlan = -1;
+				else {
+					//flightplans[i]->plane->isSelected = true;
+					selectedPlan = i;
+				}
+			}
+
+			//if (ImGui::IsItemHovered())
+			//	flightplans[i]->plane->isHovered = true;
+			//else
+			//	flightplans[i]->plane->isHovered = false;
+
+			if (selectedPlan != i) {
+				flightplans[i]->plane->isSelected = false;
+			}
+		}
+	}
+
 	ImGui::EndChild();
 
 	ImGui::Text("Lotniska");
@@ -118,20 +154,42 @@ int OnGui()
 	ImGui::Text("Informacje o Locie");
 	if (ImGui::BeginChild("##FlightInfoPanel", { (avail.x - style.ItemSpacing.x) / 2, 200 }, true))
 	{
-		if (selectedPlane != -1) {
-			auto fp = planes[selectedPlane]->flightPlan;
+		if (selectedPlan != -1) {
+			auto fp = planes[selectedPlan]->flightPlan;
 			ImGui::Text("Z:");
 			ImGui::SameLine();
-			if(ImGui::Selectable(fp->startAirport->identifier, fp->startAirport->isSelected, 0, {ImGui::CalcTextSize(fp->startAirport->identifier).x,0})) {
+			//if(ImGui::Selectable(fp->startAirport->identifier, fp->startAirport->isSelected, 0, {ImGui::CalcTextSize(fp->startAirport->identifier).x,0})) {
+			//	selectedAirport = fp->startAirport->id;
+			//	fp->startAirport->isSelected = true;
+			//}
+			if(AirportText(fp->startAirport))
 				selectedAirport = fp->startAirport->id;
-				fp->startAirport->isSelected = true;
-			}
 			ImGui::Text("Do:");
 			ImGui::SameLine();
-			if(ImGui::Selectable(fp->endAirport->identifier, fp->endAirport->isSelected, 0, {ImGui::CalcTextSize(fp->endAirport->identifier).x,0})) {
+			if (AirportText(fp->endAirport))
 				selectedAirport = fp->endAirport->id;
-				fp->endAirport->isSelected = true;
+			//if(ImGui::Selectable(fp->endAirport->identifier, fp->endAirport->isSelected, 0, {ImGui::CalcTextSize(fp->endAirport->identifier).x,0})) {
+			//	selectedAirport = fp->endAirport->id;
+			//	fp->endAirport->isSelected = true;
+			//}
+
+			for (int i = 0; i < fp->pilots.size(); i++) {
+				ImGui::Text(u8"Pilot %i: %s %s", i+1, fp->pilots[i]->firstName.c_str(), fp->pilots[i]->lastName.c_str());
 			}
+
+			ImGui::Text("Samolot:"); ImGui::SameLine();
+			if (ImGui::Selectable(fp->plane->identifier, fp->plane->isSelected, 0, { ImGui::CalcTextSize(fp->plane->identifier).x,0})) {
+				fp->plane->isSelected ^= true;
+				selectedPlane = fp->plane;
+			}
+
+			//if (ImGui::IsItemHovered())
+			//	flightplans[i]->plane->isHovered = true;
+			//else
+			//	flightplans[i]->plane->isHovered = false;
+
+			//if (selectedPlane != i)
+			//	flightplans[i]->plane->isSelected = false;
 		}
 	}
 	ImGui::EndChild();
@@ -139,15 +197,63 @@ int OnGui()
 	ImGui::Text("Akcje");
 	if (ImGui::BeginChild("##FlightActionPanel", { (avail.x - style.ItemSpacing.x) / 2, 200 }, true))
 	{
+		if (selectedPlane) {
+			if (ImGui::Button(u8"Poświeć Pilotom laserem w oczy")) {
+				flightplans.erase(std::find(flightplans.begin(), flightplans.end(), selectedPlane->flightPlan));
+				delete selectedPlane->flightPlan;
+				Plane* plane = selectedPlane;
+				planes.erase(std::find(planes.begin(), planes.end(), selectedPlane));
+				delete plane;
+				selectedPlan = -1;
+				selectedPlane = nullptr;
+			}
+			ImGui::SetItemTooltip(u8"Może spowodować nieoczekiwane uszczerbki na zdrowiu*");
+		}
 	}
 	ImGui::EndChild();
 
 	
 	ImGui::EndGroup();
 
-	ImGui::Text("Logi");
+	ImGui::Text("Logi / Plany Lotu (%i)", AcceptanceSystem::Instance()->queued);
 	if (ImGui::BeginChild("##Logs", { -1, -1 }, true))
 	{
+		auto fps = AcceptanceSystem::Instance()->q_flightplans; // flight plans
+		if (AcceptanceSystem::Instance()->queued) {
+			//for (int i = 0; i < fps.size(); i++) {
+			//	auto fp = fps.;
+			//	ImGui::TextWrapped("[Plan Lotu] - ")
+			//}
+			auto fp = fps.front();
+
+			ImGui::Text("[Plan Lotu]:"); ImGui::SameLine();
+			if (AirportText(fp->startAirport)) 
+				selectedAirport = fp->startAirport->id;
+
+			ImGui::SameLine(); ImGui::Text("->"); ImGui::SameLine();
+			if (AirportText(fp->endAirport))
+				selectedAirport = fp->endAirport->id;
+			ImGui::SameLine();
+
+			ImGui::Text(u8"| Samolot: %s", fp->plane->identifier);
+
+			if(fp->pilots.size() > 1)
+				ImGui::Text(u8"(Piloci: 1: %c. %s, 2: %c. %s)", fp->pilots[0]->firstName[0], fp->pilots[0]->lastName.c_str(), fp->pilots[1]->firstName[0], fp->pilots[1]->lastName.c_str());
+			ImGui::SameLine();
+			if (ImGui::Button(u8"Zatwierdź")) {
+				AcceptanceSystem::Instance()->verify();
+			}
+			ImGui::SameLine();
+			if (ImGui::Button(u8"Odrzuć")) {
+				AcceptanceSystem::Instance()->verify(false);
+			}
+
+			ImGui::Separator();
+		}
+
+		for (Message& m : messages) {
+			ImGui::TextWrapped("[%s]: %s", m.sender.c_str(), m.message.c_str());
+		}
 	}
 	ImGui::EndChild();
 

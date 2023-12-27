@@ -25,4 +25,6 @@
 
 // Default size is RADAR_SIZExRADAR_SIZE;
 void DrawRadar(std::vector<Plane*>& planes, std::vector<Airport*>& airports, float deltaTime, \
-	int* selectedPlane = nullptr, int* selectedAirport = nullptr);
+	Plane* selectedPlane = nullptr, int* selectedAirport = nullptr);
+
+bool AirportText(Airport* ap);

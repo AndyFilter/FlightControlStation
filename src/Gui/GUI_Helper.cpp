@@ -41,7 +41,7 @@ void DrawElementMark(ImVec2 pos, ImColor color, ImDrawList *dl, bool drawCross =
 	}
 }
 
-void DrawRadar(std::vector<Plane*>& planes, std::vector<Airport*>& airports, float deltaTime, int* selectedPlane, int* selectedAirport)
+void DrawRadar(std::vector<Plane*>& planes, std::vector<Airport*>& airports, float deltaTime, Plane* selectedPlane, int* selectedAirport)
 {
 	static bool isRadarSetUp = false; // used for animations
 	static int curCircles = 1; // used for animations
@@ -106,7 +106,7 @@ void DrawRadar(std::vector<Plane*>& planes, std::vector<Airport*>& airports, flo
 				if ((planes[i]->_spottedPos + Vec2(beginPos.x + RADAR_HALF_MARGIN, beginPos.y + RADAR_HALF_MARGIN)).dist(ImGui::GetMousePos()) < RADAR_SELECT_MARK_SIZE)
 				{
 					if (ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {
-						*selectedPlane = planes[i]->isSelected ? -1 : i;
+						selectedPlane = planes[i]->isSelected ? nullptr : planes[i];
 						planes[i]->isSelected ^= true;
 					}
 					planes[i]->isHovered = true;
@@ -249,4 +249,16 @@ void DrawRadar(std::vector<Plane*>& planes, std::vector<Airport*>& airports, flo
 			PlaySound((LPCWSTR)&header, GetModuleHandle(NULL), SND_MEMORY | SND_ASYNC);
 		}
 	}
+}
+
+bool AirportText(Airport* ap)
+{
+	if (!ap)
+		return false;
+	if (ImGui::Selectable(ap->identifier, ap->isSelected, 0, { ImGui::CalcTextSize(ap->identifier).x,0 })) {
+		ap->isSelected = true;
+		return true;
+	}
+
+	return false;
 }

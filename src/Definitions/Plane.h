@@ -33,9 +33,9 @@ class Plane
 		long long id = 0;
 		
 	public:
-		Vec2 position; // relative position [0,1]
-		Vec2 _spottedPos; // Used for displaying on the radar 
-		Vec2 velocity; // Euler method, units same as position / t 
+		Vec2 position{ 0,0 }; // relative position [0,1]
+		Vec2 _spottedPos{ 0,0 }; // Used for displaying on the radar 
+		Vec2 velocity{ 0,0 }; // Euler method, units same as position / t 
 		float radarAge = 0; // in millis
 
 		float altitude;

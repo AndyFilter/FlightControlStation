@@ -3,6 +3,7 @@
 #include "../External/ImGui/imgui_impl_dx11.h"
 #include <tchar.h>
 #include <iostream>
+#include "Fonts.h"
 
 #include "gui.h"
 
@@ -92,6 +93,21 @@ HWND GUI::Setup(int (*OnGuiFunc)())
 	pDXGIAdapter->GetParent(__uuidof(IDXGIFactory), (void**)&pIDXGIFactory);
 
 	pIDXGIFactory->MakeWindowAssociation(hwnd, DXGI_MWA_NO_WINDOW_CHANGES | DXGI_MWA_NO_ALT_ENTER);
+
+
+	ImFontConfig config;
+	config.OversampleH = 2;
+	config.OversampleV = 2;
+
+	static const ImWchar icons_ranges[] = { 0x01, 0x17D, 0 };
+	//config.PixelSnapH = true;
+	//auto font = io.Fonts->AddFontFromMemoryCompressedTTF(ConsoleFont_compressed_data, 13, 19, &config, icons_ranges);
+	//auto font = io.Fonts->AddFontFromMemoryCompressedBase85TTF(ConsoleFontM_compressed_data_base85, 16, &config, icons_ranges);
+	io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\CASCADIAMONO.ttf", 15.0f, &config, icons_ranges);
+	//io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\CONSOLA.ttf", 16.0f, &config, icons_ranges);
+
+	io.Fonts->Build();
+
 
 	return hwnd;
 }

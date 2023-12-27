@@ -26,17 +26,16 @@ class FlightPlan
 	public:
 		Airport* startAirport; // start;
 		Airport* endAirport; // destination;
-		std::vector<const Airport*> emergency_airport;
-		AcceptanceSystem* unnamed_AcceptanceSystem;
+		std::vector<Airport*> emergency_airport;
 		Plane* plane;
-		std::vector<Pilot*> pilot;
+		std::vector<Pilot*> pilots;
 		//std::vector<Airport*> unnamed_Airport;
 		//EmergencySystem* unnamed_EmergencySystem;
 		//RaportCreator* unnamed_RaportCreator;
 
 	public:
 
-		FlightPlan(Pilot pilot, Plane plane, Airport* st, Airport* dst, std::vector<Airport*> &emg);
+		FlightPlan(Pilot* pilot1, Pilot* pilot2, Plane* plane, Airport* st, Airport* dst, std::vector<Airport*>& emg);
 		FlightPlan(Airport* st, Airport* dst);
 };
 

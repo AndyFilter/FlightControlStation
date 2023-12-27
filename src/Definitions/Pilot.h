@@ -12,17 +12,17 @@
 
 class Pilot
 {
+	static long count;
 	public:
 		int pilot_ID;
 		//FlightPlan* unnamed_FlightPlan;
 
 		void send_msg(std::string komunikat);
 		Pilot(std::string im, std::string naz, int wi);
-	private:
+	public:
 		std::string lastName;
+		std::string firstName;
 		int age;
-		static long count;
-
 };
 
 #endif

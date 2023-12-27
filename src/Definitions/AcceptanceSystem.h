@@ -20,12 +20,12 @@ class AcceptanceSystem;
 class AcceptanceSystem
 {
 	public:
-		std::queue<FlightPlan*> flightplans;
+		std::queue<FlightPlan*> q_flightplans;
 		int queued = 0;
 
-		void submitFlightPlan(Pilot* pilot, Plane* plane, Airport* st, Airport* dst);
-		void submitFlightPlan(Pilot* pilot, Plane* plane, Airport* st, Airport* dst, std::vector<Airport*> emg);
-		void addFlightPlan(FlightPlan fp);
+		//void submitFlightPlan(Pilot* pilot1, Pilot* pilot2 ,Plane* plane, Airport* st, Airport* dst);
+		void submitFlightPlan(Pilot* pilot1, Pilot* pilot2, Plane* plane, Airport* st, Airport* dst, std::vector<Airport*> emg);
+		//void addFlightPlan(FlightPlan fp);
 
 		// Get singleton
 		static AcceptanceSystem* Instance() {
@@ -36,7 +36,7 @@ class AcceptanceSystem
 			return singleton;
 		}
 
-		void verify();
+		FlightPlan* verify(bool succ = true);
 
 	private:
 		std::queue<FlightPlan*> FPVector;
