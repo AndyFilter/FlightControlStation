@@ -81,7 +81,7 @@ void LogicTick(float deltaTime)
 {
 	if (AcceptanceSystem::Instance()->queued < 2 && rand() % (100 * (planes.size()+1)) == 0) {
 		// Fake pilot submitting a flight plan
-		void GenerateFlight(Airport * start, Airport * end);
+		GenerateFlight();
 	}
 }
 
