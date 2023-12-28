@@ -19,7 +19,7 @@ FlightPlan::FlightPlan(Pilot* pilot1, Pilot* pilot2, Plane* plane, Airport* st, 
 	emergency_airport = emg;
 }
 
-FlightPlan::FlightPlan(Airport* st, Airport* dst) : startAirport(st), endAirport(dst)
-{
-}
+//FlightPlan::FlightPlan(Airport* st, Airport* dst) : startAirport(st), endAirport(dst)
+//{
+//}
 

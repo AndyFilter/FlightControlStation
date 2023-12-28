@@ -21,7 +21,7 @@ class AcceptanceSystem
 {
 	public:
 		std::queue<FlightPlan*> q_flightplans;
-		int queued = 0;
+		int queued_count = 0;
 
 		//void submitFlightPlan(Pilot* pilot1, Pilot* pilot2 ,Plane* plane, Airport* st, Airport* dst);
 		void submitFlightPlan(Pilot* pilot1, Pilot* pilot2, Plane* plane, Airport* st, Airport* dst, std::vector<Airport*> emg);

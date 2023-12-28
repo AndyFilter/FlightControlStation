@@ -83,7 +83,7 @@ std::vector<Airport*> GetEmgAirports(Airport* src, Airport* dst, int count = 2) 
 
 void LogicTick(float deltaTime)
 {
-	if (AcceptanceSystem::Instance()->queued < 2 && rand() % (100 * (planes.size()+1)) == 0) {
+	if (AcceptanceSystem::Instance()->queued_count < 4 && rand() % (100 * (planes.size()+1)) == 0) {
 		// Fake pilot submitting a flight plan
 		GenerateFlight();
 	}

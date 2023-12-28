@@ -1,4 +1,4 @@
-#include "GUI_Helper.h"
+﻿#include "GUI_Helper.h"
 #include "../External/ImGui/imgui.h"
 #include "../External/ImGui/imgui_internal.h"
 #include "../Audio.h"
@@ -65,6 +65,8 @@ void DrawRadar(std::vector<Plane*>& planes, std::vector<Airport*>& airports, flo
 	}
 
 	Vec2 basePos = { RADAR_SIZE_DIV_2 + beginPos.x + RADAR_HALF_MARGIN, RADAR_SIZE_DIV_2 + beginPos.y + RADAR_HALF_MARGIN };
+
+	ImGui::RenderTextClipped({ basePos.x - 100, basePos.y - 50 }, { basePos.x + 100, basePos.y + 100 }, u8"Prędkość Lotu: XXXXm/s", nullptr, nullptr, {0.5, 0.5});
 
 	// The actual radar
 	{

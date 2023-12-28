@@ -36,7 +36,7 @@ class FlightPlan
 	public:
 
 		FlightPlan(Pilot* pilot1, Pilot* pilot2, Plane* plane, Airport* st, Airport* dst, std::vector<Airport*>& emg);
-		FlightPlan(Airport* st, Airport* dst);
+		//FlightPlan(Airport* st, Airport* dst);
 };
 
 

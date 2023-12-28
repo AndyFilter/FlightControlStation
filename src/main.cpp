@@ -215,11 +215,11 @@ int OnGui()
 	
 	ImGui::EndGroup();
 
-	ImGui::Text("Logi / Plany Lotu (%i)", AcceptanceSystem::Instance()->queued);
+	ImGui::Text("Logi / Plany Lotu (%i)", AcceptanceSystem::Instance()->queued_count);
 	if (ImGui::BeginChild("##Logs", { -1, -1 }, true))
 	{
 		auto fps = AcceptanceSystem::Instance()->q_flightplans; // flight plans
-		if (AcceptanceSystem::Instance()->queued) {
+		if (AcceptanceSystem::Instance()->queued_count) {
 			//for (int i = 0; i < fps.size(); i++) {
 			//	auto fp = fps.;
 			//	ImGui::TextWrapped("[Plan Lotu] - ")
@@ -241,7 +241,7 @@ int OnGui()
 				ImGui::Text(u8"(Piloci: 1: %c. %s, 2: %c. %s)", fp->pilots[0]->firstName[0], fp->pilots[0]->lastName.c_str(), fp->pilots[1]->firstName[0], fp->pilots[1]->lastName.c_str());
 			ImGui::SameLine();
 			if (ImGui::Button(u8"Zatwierdź")) {
-				AcceptanceSystem::Instance()->verify();
+				AcceptanceSystem::Instance()->verify(true);
 			}
 			ImGui::SameLine();
 			if (ImGui::Button(u8"Odrzuć")) {

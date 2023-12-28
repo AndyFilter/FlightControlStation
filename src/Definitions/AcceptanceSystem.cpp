@@ -9,26 +9,26 @@ using namespace std;
 #include "../LogicHelper.h"
 
 //void AcceptanceSystem::submitFlightPlan(Pilot* pilot1, Pilot* pilot2, Plane* plane, Airport* st, Airport* dst) {
-//	queued++;
+//	queued_count++;
 //	auto fp = new FlightPlan(pilot1, pilot2, plane, st, dst);
 //	FPVector.push(fp)
 //	//throw "Not yet implemented";
 //}
 
 void AcceptanceSystem::submitFlightPlan(Pilot* pilot1, Pilot* pilot2, Plane* plane, Airport* st, Airport* dst, std::vector<Airport*> emg) {
-	queued++;
+	queued_count++;
 	auto fp = new FlightPlan(pilot1, pilot2, plane, st, dst, emg);
 	q_flightplans.push(fp);
 	//throw "Not yet implemented";
 }
 
 //void AcceptanceSystem::addFlightPlan(FlightPlan fp) {
-//	queued--;
+//	queued_count--;
 //	//throw "Not yet implemented";
 //}
 
 FlightPlan* AcceptanceSystem::verify(bool succ) {
-	queued--;
+	queued_count--;
 	auto top = q_flightplans.front();
 	q_flightplans.pop();
 	if (!succ) {
