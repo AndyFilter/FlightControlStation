@@ -47,6 +47,8 @@ class Plane
 		bool isSelected = false; // UI thing
 		bool isHovered = false; // UI thing
 
+		bool isAirborn = true; // false when the plane has arrived
+
 		Plane(Vec2 pos) : position(pos) { id = count++; GeneratePlaneIdentifier(); };
 		Plane(Vec2 pos, const char name[64]) : position(pos) { id = count++; strcpy_s(identifier, name); };
 		Plane(Vec2 pos, Vec2 velocity) : position(pos), velocity(velocity) { id = count++; GeneratePlaneIdentifier(); };

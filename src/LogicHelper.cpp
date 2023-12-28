@@ -10,16 +10,20 @@ void UpdatePlanesPositions(float deltaTime)
 {
 	for (int i = 0; i < planes.size(); i++)
 	{
+		if (!planes[i]->isAirborn)
+			continue;
+
 		planes[i]->position += planes[i]->velocity * deltaTime/1000;
 
 		if (sign((planes[i]->flightPlan->endAirport->position-planes[i]->position).x) != sign(planes[i]->velocity.x)) {
 			if (planes[i]->isSelected)
 				selectedPlane = nullptr;
+			planes[i]->isAirborn = false;
 			//if (i < selectedPlane)
 			//	selectedPlane--;
-			delete planes[i];
-			planes.erase(planes.begin() + i);
-			i--;
+			//delete planes[i];
+			//planes.erase(planes.begin() + i);
+			//i--;
 		}
 	}
 }

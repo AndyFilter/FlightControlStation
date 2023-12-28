@@ -27,7 +27,7 @@ inline std::vector<Airport*> airports;
 inline std::vector<FlightPlan*> flightplans;
 inline Plane* selectedPlane = nullptr;
 inline int selectedAirport = -1;
-inline int selectedPlan = -1;
+inline FlightPlan* selectedPlan = nullptr;
 //inline std::vector<Pilot*> pilots;
 
 // delta time passed as milliseconds

@@ -2,6 +2,7 @@
 #include "../External/ImGui/imgui.h"
 #include "../External/ImGui/imgui_internal.h"
 #include "../Audio.h"
+#include "../LogicHelper.h"
 
 #include <math.h>
 #include <stdio.h>
@@ -41,7 +42,7 @@ void DrawElementMark(ImVec2 pos, ImColor color, ImDrawList *dl, bool drawCross =
 	}
 }
 
-void DrawRadar(std::vector<Plane*>& planes, std::vector<Airport*>& airports, float deltaTime, Plane* selectedPlane, int* selectedAirport)
+void DrawRadar(std::vector<Plane*>& planes, std::vector<Airport*>& airports, float deltaTime, int* selectedAirport)
 {
 	static bool isRadarSetUp = false; // used for animations
 	static int curCircles = 1; // used for animations
@@ -101,17 +102,21 @@ void DrawRadar(std::vector<Plane*>& planes, std::vector<Airport*>& airports, flo
 		if (planes[i]->radarAge) {
 #endif
 
-
-			if (selectedPlane) {
-				if ((planes[i]->_spottedPos + Vec2(beginPos.x + RADAR_HALF_MARGIN, beginPos.y + RADAR_HALF_MARGIN)).dist(ImGui::GetMousePos()) < RADAR_SELECT_MARK_SIZE)
-				{
-					if (ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {
-						selectedPlane = planes[i]->isSelected ? nullptr : planes[i];
-						planes[i]->isSelected ^= true;
-					}
-					planes[i]->isHovered = true;
+			if ((planes[i]->_spottedPos + Vec2(beginPos.x + RADAR_HALF_MARGIN, beginPos.y + RADAR_HALF_MARGIN)).dist(ImGui::GetMousePos()) < RADAR_SELECT_MARK_SIZE)
+			{
+				if (ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {
+					if (planes[i] == selectedPlane)
+						selectedPlane = nullptr;
+					else {
+						selectedPlane = planes[i];
+						selectedPlan = planes[i]->flightPlan;
+					}	
+					planes[i]->isSelected ^= true;
 				}
+				planes[i]->isHovered = true;
 			}
+			else
+				planes[i]->isHovered = false;
 
 #ifdef RADAR_FADING_PLANES
 			float opacity = planes[i]->radarAge / PLANE_RADAR_MAX_AGE;
@@ -134,6 +139,7 @@ void DrawRadar(std::vector<Plane*>& planes, std::vector<Airport*>& airports, flo
 			continue;
 		}
 #else
+
 			if (planes[i]->isHovered)
 				dl->AddCircleFilled(planes[i]->_spottedPos + Vec2(beginPos.x + RADAR_HALF_MARGIN, beginPos.y + RADAR_HALF_MARGIN), 10, ImColor(0.4f, 1.f, 0.4f, 1.f));
 			else
@@ -160,6 +166,13 @@ void DrawRadar(std::vector<Plane*>& planes, std::vector<Airport*>& airports, flo
 
 		//if ((planes[i]->position.x < 0.5) ? (fmodf(angularPos, M_PI * 2) < M_PI) : (fmodf(angularPos, M_PI * 2) > M_PI))
 		//	continue;
+
+		// skip drawing planes that landed
+		if (!planes[i]->isAirborn) {
+			if(planes[i]->radarAge < -500)
+				planes[i]->radarAge = 0;
+			continue;
+		}
 
 		short quarter = planes[i]->position.x > 0.5 ? (planes[i]->position.y > 0.5 ? 0 : 1) : (planes[i]->position.y > 0.5 ? 3 : 2);
 		if (scan_quarter != quarter)

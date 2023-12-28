@@ -29,12 +29,14 @@ void AcceptanceSystem::submitFlightPlan(Pilot* pilot1, Pilot* pilot2, Plane* pla
 
 FlightPlan* AcceptanceSystem::verify(bool succ) {
 	queued--;
-	if (!succ)
-		return nullptr;
 	auto top = q_flightplans.front();
+	q_flightplans.pop();
+	if (!succ) {
+		delete top;
+		return nullptr;
+	}
 	top->plane->flightPlan = top;
 	planes.push_back(top->plane);
-	q_flightplans.pop();
 	flightplans.push_back(top);
 	return top;
 	//throw "Not yet implemented";

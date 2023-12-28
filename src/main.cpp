@@ -43,7 +43,7 @@ int OnGui()
 
 	float dT = lastFrameRenderTime / 1000.f;
 
-	DrawRadar(planes, airports, dT * !isRadarStopped, selectedPlane, &selectedAirport);
+	DrawRadar(planes, airports, dT * !isRadarStopped, &selectedAirport);
 
 	ImGui::SameLine();
 
@@ -99,12 +99,12 @@ int OnGui()
 		{
 			char label[24];
 			sprintf_s(label, "Plan%03d", i + 1);
-			if (ImGui::Selectable(label, selectedPlan == i)) {
-				if (selectedPlan == i)
-					selectedPlan = -1;
+			if (ImGui::Selectable(label, selectedPlan == flightplans[i])) {
+				if (selectedPlan == flightplans[i])
+					selectedPlan = nullptr;
 				else {
 					//flightplans[i]->plane->isSelected = true;
-					selectedPlan = i;
+					selectedPlan = flightplans[i];
 				}
 			}
 
@@ -113,7 +113,7 @@ int OnGui()
 			//else
 			//	flightplans[i]->plane->isHovered = false;
 
-			if (selectedPlan != i) {
+			if (selectedPlan != flightplans[i]) {
 				flightplans[i]->plane->isSelected = false;
 			}
 		}
@@ -154,8 +154,8 @@ int OnGui()
 	ImGui::Text("Informacje o Locie");
 	if (ImGui::BeginChild("##FlightInfoPanel", { (avail.x - style.ItemSpacing.x) / 2, 200 }, true))
 	{
-		if (selectedPlan != -1) {
-			auto fp = planes[selectedPlan]->flightPlan;
+		if (selectedPlan) {
+			auto fp = selectedPlan;
 			ImGui::Text("Z:");
 			ImGui::SameLine();
 			//if(ImGui::Selectable(fp->startAirport->identifier, fp->startAirport->isSelected, 0, {ImGui::CalcTextSize(fp->startAirport->identifier).x,0})) {
@@ -204,7 +204,7 @@ int OnGui()
 				Plane* plane = selectedPlane;
 				planes.erase(std::find(planes.begin(), planes.end(), selectedPlane));
 				delete plane;
-				selectedPlan = -1;
+				selectedPlan = nullptr;
 				selectedPlane = nullptr;
 			}
 			ImGui::SetItemTooltip(u8"Może spowodować nieoczekiwane uszczerbki na zdrowiu*");
