@@ -12,6 +12,7 @@
 //class RaportCreator;
 //class Raport;
 
+
 class Raport
 {
 	public:

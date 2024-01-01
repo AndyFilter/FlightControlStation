@@ -20,7 +20,7 @@ class FlightRaport: public Raport
 	private:
 		const Airport * start;
 		const Airport * planed_destination;
-		const Airport * emergency_airport;
+		std::vector<Airport*> emergency_airport;
 		const Airport * final_destination;
 		int pilot_ID[2];
 

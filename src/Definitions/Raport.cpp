@@ -6,7 +6,8 @@ using namespace std;
 #include "Archive.h"
 #include "RaportCreator.h"
 
-void Raport::print() {
+//PURE-VIRTUAL
+/*void Raport::print() {
 	throw "Not yet implemented";
-}
+}*/
 
