@@ -6,8 +6,12 @@ using namespace std;
 #include "Archive.h"
 #include "RaportCreator.h"
 
+Raport::Raport(string spcs) {
+	plane_specs = spcs;
+}
+
 //PURE-VIRTUAL
-/*void Raport::print() {
-	throw "Not yet implemented";
-}*/
+//void Raport::print() {
+//	throw "Not yet implemented";
+//}
 
