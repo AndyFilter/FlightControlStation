@@ -17,7 +17,7 @@ class FlightRaport: public Raport
 	public:
 
 		FlightRaport(FlightPlan fp, const Airport *const fd);
-		void print(ofstream &output);
+		void print(ofstream &output);//zmien w diag
 	private:
 		const Airport * start;
 		const Airport * planed_destination;

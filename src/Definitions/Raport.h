@@ -21,7 +21,7 @@ class Raport
 		//RaportCreator* unnamed_RaportCreator;
 		Raport(string spcs);
 
-		virtual void print(ofstream& output) = 0;
+		virtual void print(ofstream& output) = 0; //zmien w diag
 	protected:
 		std::string plane_specs;
 

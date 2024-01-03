@@ -1,5 +1,6 @@
 #include <exception>
 #include <vector>
+#include <fstream>
 
 //using namespace std;
 
@@ -19,10 +20,12 @@ class Archive
 		//RaportCreator* unnamed_RaportCreator;
 		//Raport* unnamed_Raport;
 
-		void print(unsigned index);
-		void find(std::string string);
+		void set_data_output(string s);
+		void print();		//zmien w diag
+		void get(Raport* rap);//zmien w diag
 	private:
-		std::vector<Raport> raportVector;
+		std::vector<Raport*> raportVector;
+		ofstream data_output;
 
 };
 
