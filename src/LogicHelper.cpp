@@ -5,6 +5,12 @@
 
 #define sign(x) (x == 0 ? 0 : x < 0 ? -1 : 1)
 
+void PlaneLanded(Plane* plane) {
+	if (plane->isSelected)
+		selectedPlane = nullptr;
+	plane->isAirborn = false;
+}
+
 // Euler velocity/position method
 void UpdatePlanesPositions(float deltaTime)
 {
@@ -16,26 +22,13 @@ void UpdatePlanesPositions(float deltaTime)
 		planes[i]->position += planes[i]->velocity * deltaTime/1000;
 
 		if (sign((planes[i]->flightPlan->endAirport->position-planes[i]->position).x) != sign(planes[i]->velocity.x)) {
-			if (planes[i]->isSelected)
-				selectedPlane = nullptr;
-			planes[i]->isAirborn = false;
-			//if (i < selectedPlane)
-			//	selectedPlane--;
-			//delete planes[i];
-			//planes.erase(planes.begin() + i);
-			//i--;
-
+			PlaneLanded(planes[i]);
 		}
 	}
 }
 
 Pilot* GetRandomFreePilot()
 {
-	// Albo wybrać z listy pilotów, albo..
-	//for (Pilot*& pilot : pilots)
-	//{
-	//}
-	// Albo wygenerować nowego
 	return new Pilot(NAMES[rand() % NAMES_COUNT], SURNAMES[rand() % NAMES_COUNT], (rand() % 30) + 24);
 }
 
@@ -50,6 +43,17 @@ Plane* GetRandomFreePlane(Airport* src = nullptr, Airport* dst = nullptr)
 		return new Plane(Vec2(0.5, 0.3));
 }
 
+Plane* GetRandomAirbornPlane() {
+	Plane* plane = planes[rand() % planes.size()];
+
+	int iter = 0;
+
+	while (!plane->isAirborn && iter < 200)
+		plane = planes[rand() % planes.size()];
+
+	return plane;
+}
+
 Airport* GetRandomAirport(Airport* ap = nullptr)
 {
 	if(!ap)
@@ -62,11 +66,6 @@ Airport* GetRandomAirport(Airport* ap = nullptr)
 	} while (dst == ap);
 
 	return dst;
-
-	//for (Airport*& a : airports) {
-	//	if (a != ap)
-	//		return a;
-	//}
 }
 
 std::vector<Airport*> GetEmgAirports(Airport* src, Airport* dst, int count = 2) {
@@ -82,11 +81,22 @@ std::vector<Airport*> GetEmgAirports(Airport* src, Airport* dst, int count = 2) 
 	return aps;
 }
 
+void SetPlaneBadPath(Plane* plane) {
+	plane->isBadDirection = true;
+}
+
 void LogicTick(float deltaTime)
 {
-	if (AcceptanceSystem::Instance()->queued_count < 4 && rand() % (100 * (planes.size()+1)) == 0) {
+	float fixedRand = deltaTime * rand();
+
+	if (AcceptanceSystem::Instance()->queued_count < 4 && fmodf(fixedRand, (100 * (planes.size()+1))) < 1) {
 		// Fake pilot submitting a flight plan
 		GenerateFlight();
+	}
+
+	if (!planes.empty() && fmodf(fixedRand, 1500) < 1) {
+		// fake pilot falling asleep or smth ¯\_(ツ)_/¯
+		SetPlaneBadPath(GetRandomAirbornPlane());
 	}
 }
 

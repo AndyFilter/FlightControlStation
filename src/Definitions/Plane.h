@@ -27,6 +27,7 @@ class Plane
 		float* get_pos();
 		float get_alt();
 		float get_velocity();
+		void CorrectFlight();
 
 	private:
 		static long long count;
@@ -48,6 +49,9 @@ class Plane
 		bool isHovered = false; // UI thing
 
 		bool isAirborn = true; // false when the plane has arrived
+
+		bool isBadDirection = false; // Used to simulate plane deviating from the path
+		bool wasBadSpotted = false; // UI thingy
 
 		Plane(Vec2 pos) : position(pos) { id = count++; GeneratePlaneIdentifier(); };
 		Plane(Vec2 pos, const char name[64]) : position(pos) { id = count++; strcpy_s(identifier, name); };

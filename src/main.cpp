@@ -52,6 +52,7 @@ int OnGui()
 
 	auto avail = ImGui::GetContentRegionAvail();
 
+#ifdef _DEBUG
 	ImGui::BeginGroup();
 	if (ImGui::Button("Generate Flight")) {
 		GenerateFlight();
@@ -63,6 +64,7 @@ int OnGui()
 		isRadarStopped = !isRadarStopped;
 
 	ImGui::BeginGroup();
+#endif
 
 	//ImGui::SetNextItemWidth((avail.x - style.ItemSpacing.x) / 2);
 #pragma region SAMOLOTY
@@ -100,6 +102,9 @@ int OnGui()
 		//ImGui::ListBox("##PlanesTable", &selectedPlane, [](void* data, int idx) { return (const char*)planes[idx].identifier; }, planes.data(), (int)planes.size());
 		for (int i = 0; i < flightplans.size(); i++)
 		{
+			if (!flightplans[i]->plane->isAirborn)
+				continue;
+
 			char label[24];
 			sprintf_s(label, "Plan%03d", i + 1);
 			if (ImGui::Selectable(label, selectedPlan == flightplans[i])) {
@@ -201,6 +206,14 @@ int OnGui()
 	if (ImGui::BeginChild("##FlightActionPanel", { (avail.x - style.ItemSpacing.x) / 2, 200 }, true))
 	{
 		if (selectedPlane) {
+			ImGui::BeginDisabled(!selectedPlane->wasBadSpotted);
+			{
+				if (ImGui::Button(u8"Poinformuj pilota o kierunku")) {
+					selectedPlane->CorrectFlight();
+				}
+			}
+			ImGui::EndDisabled();
+
 			if (ImGui::Button(u8"Poświeć Pilotom laserem w oczy")) {
 				flightplans.erase(std::find(flightplans.begin(), flightplans.end(), selectedPlane->flightPlan));
 				delete selectedPlane->flightPlan;
@@ -212,6 +225,7 @@ int OnGui()
 			}
 			ImGui::SetItemTooltip(u8"Może spowodować nieoczekiwane uszczerbki na zdrowiu*");
 		}
+
 	}
 	ImGui::EndChild();
 

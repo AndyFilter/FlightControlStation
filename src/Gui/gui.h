@@ -13,6 +13,12 @@ namespace GUI
 	inline bool (*onExitFunc)();
 
 	static int windowX = 1280, windowY = 756;
+
+#ifdef _DEBUG
+#define SYNC_FRAMES 2
+#else
+#define SYNC_FRAMES 1
+#endif
 }
 
 #define TOOLTIP(...)					\

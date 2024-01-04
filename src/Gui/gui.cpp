@@ -41,7 +41,7 @@ HWND GUI::Setup(int (*OnGuiFunc)())
 	//ImGui_ImplWin32_EnableDpiAwareness();
 	wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T("Flight Control Sim"), NULL };
 	::RegisterClassEx(&wc);
-	hwnd = ::CreateWindow(wc.lpszClassName, _T("Flight Control Sim"), (WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX), 100, 100, windowX, windowY, NULL, NULL, wc.hInstance, NULL);
+	hwnd = ::CreateWindow(wc.lpszClassName, _T("Flight Control Sim"), (WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX), 50, 50, windowX, windowY, NULL, NULL, wc.hInstance, NULL);
 
 	// Initialize Direct3D
 	if (!CreateDeviceD3D(hwnd))
@@ -196,7 +196,7 @@ int GUI::DrawGui() noexcept
 	g_pd3dDeviceContext->OMSetRenderTargets(1, &g_mainRenderTargetView, NULL);
 	//g_pd3dDeviceContext->ClearRenderTargetView(g_mainRenderTargetView, clear_color_with_alpha);
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-	auto presentRes = g_pSwapChain->Present(2, 0);
+	auto presentRes = g_pSwapChain->Present(SYNC_FRAMES, 0);
 	if (presentRes == DXGI_STATUS_OCCLUDED)
 		Sleep(1);
 	return 0;

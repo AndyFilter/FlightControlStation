@@ -25,3 +25,8 @@ float Plane::get_velocity() {
 	throw "Not yet implemented";
 }
 
+void Plane::CorrectFlight()
+{
+	isBadDirection = false;
+}
+

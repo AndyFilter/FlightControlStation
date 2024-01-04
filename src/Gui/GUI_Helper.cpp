@@ -66,7 +66,7 @@ void DrawRadar(std::vector<Plane*>& planes, std::vector<Airport*>& airports, flo
 
 	Vec2 basePos = { RADAR_SIZE_DIV_2 + beginPos.x + RADAR_HALF_MARGIN, RADAR_SIZE_DIV_2 + beginPos.y + RADAR_HALF_MARGIN };
 
-	ImGui::RenderTextClipped({ basePos.x - 100, basePos.y - 50 }, { basePos.x + 100, basePos.y + 100 }, u8"Prędkość Lotu: XXXXm/s", nullptr, nullptr, {0.5, 0.5});
+	//ImGui::RenderTextClipped({ basePos.x - 100, basePos.y - 50 }, { basePos.x + 100, basePos.y + 100 }, u8"Prędkość Lotu: XXXXm/s", nullptr, nullptr, {0.5, 0.5});
 
 	// The actual radar
 	{
@@ -104,7 +104,7 @@ void DrawRadar(std::vector<Plane*>& planes, std::vector<Airport*>& airports, flo
 		if (planes[i]->radarAge) {
 #endif
 
-			if ((planes[i]->_spottedPos + Vec2(beginPos.x + RADAR_HALF_MARGIN, beginPos.y + RADAR_HALF_MARGIN)).dist(ImGui::GetMousePos()) < RADAR_SELECT_MARK_SIZE)
+			if ((planes[i]->_spottedPos + Vec2(beginPos.x + RADAR_HALF_MARGIN, beginPos.y + RADAR_HALF_MARGIN)).dist(ImGui::GetMousePos()) < RADAR_SELECT_MARK_SIZE - 5)
 			{
 				if (ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {
 					if (planes[i] == selectedPlane)
@@ -143,11 +143,11 @@ void DrawRadar(std::vector<Plane*>& planes, std::vector<Airport*>& airports, flo
 #else
 
 			if (planes[i]->isHovered)
-				dl->AddCircleFilled(planes[i]->_spottedPos + Vec2(beginPos.x + RADAR_HALF_MARGIN, beginPos.y + RADAR_HALF_MARGIN), 10, ImColor(0.4f, 1.f, 0.4f, 1.f));
+				dl->AddCircleFilled(planes[i]->_spottedPos + Vec2(beginPos.x + RADAR_HALF_MARGIN, beginPos.y + RADAR_HALF_MARGIN), 10, planes[i]->wasBadSpotted ? RADAR_HOVERED_BAD_PLANE_COLOR : RADAR_HOVERED_PLANE_COLOR);
 			else
-				dl->AddCircleFilled(planes[i]->_spottedPos + Vec2(beginPos.x + RADAR_HALF_MARGIN, beginPos.y + RADAR_HALF_MARGIN), 10, ImColor(0.1f, 0.95f, 0.1f, 1.f));
+				dl->AddCircleFilled(planes[i]->_spottedPos + Vec2(beginPos.x + RADAR_HALF_MARGIN, beginPos.y + RADAR_HALF_MARGIN), 10, planes[i]->wasBadSpotted ? RADAR_BAD_PLANE_COLOR : RADAR_PLANE_COLOR);
 
-			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(RADAR_TEXT_COLOR, 1.f));
+			ImGui::PushStyleColor(ImGuiCol_Text, planes[i]->wasBadSpotted ? ImVec4(RADAR_BAD_TEXT_COLOR, 1.f) : ImVec4(RADAR_TEXT_COLOR, 1.f));
 
 			auto startPos = planes[i]->_spottedPos + RADAR_HALF_MARGIN + ImGui::WindowPosRelToAbs(ImGui::GetCurrentWindow(), { 0,0 });
 			ImGui::RenderTextClipped({ startPos.x - 100, startPos.y - 50 }, { startPos.x + 100, startPos.y + 100 }, planes[i]->identifier, nullptr, nullptr, { 0.5, 0.5 });
@@ -193,6 +193,8 @@ void DrawRadar(std::vector<Plane*>& planes, std::vector<Airport*>& airports, flo
 		//printf("center dist = %f\n", centerDist);
 
 		if (dist < (0.08 * centerDist) && centerDist < 0.5 && centerDist > 0.05) {
+			planes[i]->wasBadSpotted = planes[i]->isBadDirection;
+
 			planes[i]->radarAge = PLANE_RADAR_MAX_AGE + 50;
 			planes[i]->_spottedPos = ToRadarPos(planes[i]->position);
 			WAV_HEADER header;
@@ -251,7 +253,7 @@ void DrawRadar(std::vector<Plane*>& planes, std::vector<Airport*>& airports, flo
 
 		float dist = fabsf((-normalizedPos.x * radarAngle + normalizedPos.y) / sqrt(1 + (radarAngle * radarAngle)));
 		//printf("angle = %f, distance = %f\n", fmodf(angularPos, M_PI * 2), dist);
-
+		
 		float centerDist = airports[i]->position.dist(Vec2(0.5, 0.5));
 		//printf("center dist = %f\n", centerDist);
 
