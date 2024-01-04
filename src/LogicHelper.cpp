@@ -24,6 +24,7 @@ void UpdatePlanesPositions(float deltaTime)
 			//delete planes[i];
 			//planes.erase(planes.begin() + i);
 			//i--;
+
 		}
 	}
 }

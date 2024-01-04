@@ -20,12 +20,12 @@ class Archive
 		//RaportCreator* unnamed_RaportCreator;
 		//Raport* unnamed_Raport;
 
-		void set_data_output(string s);
+		void set_data_output(std::string s);
 		void print();		//zmien w diag
 		void get(Raport* rap);//zmien w diag
 	private:
 		std::vector<Raport*> raportVector;
-		ofstream data_output;
+		std::ofstream data_output;
 
 };
 

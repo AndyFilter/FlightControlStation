@@ -8,10 +8,13 @@
 #include "Definitions/Pilot.h"
 #include "Definitions/FlightPlan.h"
 #include "Definitions/AcceptanceSystem.h"
+#include "Definitions/RaportCreator.h"
+
 
 #include <vector>
 #include <chrono>
 #include <time.h>
+
 
 inline uint64_t micros() {
 	static auto programStart{ std::chrono::steady_clock::now() };
@@ -288,6 +291,10 @@ int main()
 	//pilots.push_back(new Pilot("Tomasz", "Dzialowy", 44));
 
 	auto frameStartRender = micros();
+
+	/*04.01.2024 KHan*/
+	Arch.set_data_output("test");
+	RCreator.set_Archive_link(&Arch);
 		
 	while (!hasExited)
 	{
@@ -304,6 +311,7 @@ int main()
 		frameStartRender = now;
 		//printf("frame rendered in: %lldus\n", lastFrameRenderTime);
 	}
+
 
 	return 0;
 }

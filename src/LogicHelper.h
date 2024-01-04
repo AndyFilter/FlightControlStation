@@ -5,6 +5,8 @@
 #include "Definitions/Airport.h"
 #include "Definitions/Plane.h"
 #include "Definitions/FlightPlan.h"
+#include "Definitions/Archive.h"
+#include "Definitions/RaportCreator.h"
 
 #include <vector>
 
@@ -29,6 +31,8 @@ inline Plane* selectedPlane = nullptr;
 inline int selectedAirport = -1;
 inline FlightPlan* selectedPlan = nullptr;
 //inline std::vector<Pilot*> pilots;
+inline RaportCreator RCreator;
+inline Archive Arch;
 
 // delta time passed as milliseconds
 void UpdatePlanesPositions(float deltaTime);

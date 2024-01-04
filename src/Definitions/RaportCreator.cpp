@@ -13,7 +13,7 @@ void RaportCreator::set_Archive_link(Archive* arch) {
 }
 
 void RaportCreator::create_raport(FlightPlan& fp) {
-	Raport* rap =new FlightRaport(fp, nullptr);
+	Raport* rap =new FlightRaport(fp, fp.endAirport);
 
 	verify(rap);
 }
