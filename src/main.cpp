@@ -52,8 +52,8 @@ int OnGui()
 
 	auto avail = ImGui::GetContentRegionAvail();
 
-#ifdef _DEBUG
 	ImGui::BeginGroup();
+#ifdef _DEBUG
 	if (ImGui::Button("Generate Flight")) {
 		GenerateFlight();
 		//Plane* plane = GenerateFlight();
@@ -62,9 +62,9 @@ int OnGui()
 	ImGui::SameLine();
 	if (ImGui::Button("Stop the radar"))
 		isRadarStopped = !isRadarStopped;
-
+	#endif
 	ImGui::BeginGroup();
-#endif
+
 
 	//ImGui::SetNextItemWidth((avail.x - style.ItemSpacing.x) / 2);
 #pragma region SAMOLOTY
