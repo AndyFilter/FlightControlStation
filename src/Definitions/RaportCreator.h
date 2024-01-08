@@ -24,7 +24,7 @@ class RaportCreator
 		void set_Archive_link(Archive* arch);
 		void create_raport(FlightPlan& fp); //zmien w diag
 		void verify(Raport* a); //zmien w diag
-		void send_to_archive(Raport* rap);
+		void send_to_archive(Raport* rap);//zmien w diag
 	private:
 		//std::queue<Raport*> act; //zmien w diag
 		Archive* arch_link;
