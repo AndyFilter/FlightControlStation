@@ -9,6 +9,7 @@ void PlaneLanded(Plane* plane) {
 	if (plane->isSelected)
 		selectedPlane = nullptr;
 	plane->isAirborn = false;
+	RCreator.create_raport(*(plane->flightPlan));
 }
 
 // Euler velocity/position method

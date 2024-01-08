@@ -326,6 +326,8 @@ int main()
 		//printf("frame rendered in: %lldus\n", lastFrameRenderTime);
 	}
 
+	Arch.print();
+
 
 	return 0;
 }
