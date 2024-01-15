@@ -86,18 +86,48 @@ void SetPlaneBadPath(Plane* plane) {
 	plane->isBadDirection = true;
 }
 
+void SetPlaneMayday(Plane* p) {
+	messages.push_back(Message(p->identifier, "MAYDAY, MAYDAY, MAYDAY. " + p->flightPlan->pilots[0]->lastName + ". Lot z " + p->flightPlan->startAirport->identifier + ". OVER"));
+
+	if (selectedPlan = p->flightPlan) {
+		selectedPlan = nullptr;
+		selectedPlane = nullptr;
+	}
+
+	flightplans.erase(std::find(flightplans.begin(), flightplans.end(), p->flightPlan));
+	delete p->flightPlan;
+	planes.erase(std::find(planes.begin(), planes.end(), p));
+	delete p;
+}
+
 void LogicTick(float deltaTime)
 {
 	float fixedRand = deltaTime * rand();
 
-	if (AcceptanceSystem::Instance()->queued_count < 4 && fmodf(fixedRand, (100 * (planes.size()+1))) < 1) {
+	if (AcceptanceSystem::Instance()->queued_count < 3 && fmodf(fixedRand, (150 * (planes.size()+1))) < 1) {
 		// Fake pilot submitting a flight plan
 		GenerateFlight();
 	}
 
 	if (!planes.empty() && fmodf(fixedRand, 1500) < 1) {
-		// fake pilot falling asleep or smth ¯\_(ツ)_/¯
+		// Fake pilot falling asleep or smth ¯\_(ツ)_/¯
 		SetPlaneBadPath(GetRandomAirbornPlane());
+	}
+
+	if (!planes.empty() && fmodf(fixedRand, 10000) < 1) {
+		// MAY-DAY signal (destroys the plane and the flightplan)
+		Plane* p = GetRandomAirbornPlane();
+		SetPlaneMayday(p);
+	}
+
+	for (Plane*& p : planes) {
+		if (p->wasBadSpotted)
+			p->badTimer += deltaTime;
+
+		// Plane can be up to 20 seconds in the "bad" state
+		if (p->badTimer > 20000) {
+			SetPlaneMayday(p);
+		}
 	}
 }
 
@@ -122,9 +152,14 @@ void GenerateFlight(Airport* start, Airport* end)
 
 
 	// ---------- NEW CODE ----------
+	
+	// Used to avoid creating 2 flights from the same airport one after another
+	static Airport* last_chosen_airport{ nullptr };
 
-	auto srcAirport = GetRandomAirport();
+	auto srcAirport = GetRandomAirport(last_chosen_airport);
 	auto dstAirport = GetRandomAirport(srcAirport);
+
+	last_chosen_airport = srcAirport;
 
 	AcceptanceSystem::Instance()->submitFlightPlan(GetRandomFreePilot(), GetRandomFreePilot(), GetRandomFreePlane(srcAirport, dstAirport), srcAirport, dstAirport, GetEmgAirports(srcAirport, dstAirport));
 }

@@ -96,6 +96,7 @@ int OnGui()
 	*/
 #pragma endregion SAMOLOTY
 
+	// Menu panel with flight plans
 	ImGui::Text("Loty");
 	if (ImGui::BeginChild("##FlightsTable", { (avail.x - style.ItemSpacing.x) / 2, 200}, true))
 	{
@@ -129,6 +130,7 @@ int OnGui()
 
 	ImGui::EndChild();
 
+	// Menu panel with airports
 	ImGui::Text("Lotniska");
 	if (ImGui::BeginChild("##AirportsTable", { (avail.x - style.ItemSpacing.x) / 2, 200 }, true))
 	{
@@ -187,8 +189,8 @@ int OnGui()
 
 			ImGui::Text("Samolot:"); ImGui::SameLine();
 			if (ImGui::Selectable(fp->plane->identifier, fp->plane->isSelected, 0, { ImGui::CalcTextSize(fp->plane->identifier).x,0})) {
+				selectedPlane = fp->plane->isSelected ? nullptr : fp->plane;
 				fp->plane->isSelected ^= true;
-				selectedPlane = fp->plane;
 			}
 
 			//if (ImGui::IsItemHovered())
@@ -208,22 +210,24 @@ int OnGui()
 		if (selectedPlane) {
 			ImGui::BeginDisabled(!selectedPlane->wasBadSpotted);
 			{
-				if (ImGui::Button(u8"Poinformuj pilota o kierunku")) {
+				if (ImGui::Button(u8"Poinformuj pilota o kierunku", {-1, 0})) {
 					selectedPlane->CorrectFlight();
 				}
 			}
 			ImGui::EndDisabled();
 
-			if (ImGui::Button(u8"Poświeć Pilotom laserem w oczy")) {
-				flightplans.erase(std::find(flightplans.begin(), flightplans.end(), selectedPlane->flightPlan));
-				delete selectedPlane->flightPlan;
-				Plane* plane = selectedPlane;
-				planes.erase(std::find(planes.begin(), planes.end(), selectedPlane));
-				delete plane;
-				selectedPlan = nullptr;
-				selectedPlane = nullptr;
-			}
-			ImGui::SetItemTooltip(u8"Może spowodować nieoczekiwane uszczerbki na zdrowiu*");
+#ifdef _DEBUG
+			//if (ImGui::Button(u8"Poświeć Pilotom laserem w oczy")) {
+			//	flightplans.erase(std::find(flightplans.begin(), flightplans.end(), selectedPlane->flightPlan));
+			//	delete selectedPlane->flightPlan;
+			//	Plane* plane = selectedPlane;
+			//	planes.erase(std::find(planes.begin(), planes.end(), selectedPlane));
+			//	delete plane;
+			//	selectedPlan = nullptr;
+			//	selectedPlane = nullptr;
+			//}
+			//ImGui::SetItemTooltip(u8"Może spowodować nieoczekiwane uszczerbki na zdrowiu*");
+#endif
 		}
 
 	}
@@ -305,6 +309,9 @@ int main()
 	//pilots.push_back(new Pilot("Tomasz", "Dzialowy", 44));
 
 	auto frameStartRender = micros();
+
+	assert(airports.size() >= 4);
+	assert(ImGui::GetIO().Ctx); // Make sure the UI was set-up correctly
 
 	/*04.01.2024 KHan*/
 	Arch.set_data_output("test");

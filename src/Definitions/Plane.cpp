@@ -28,5 +28,6 @@ float Plane::get_velocity() {
 void Plane::CorrectFlight()
 {
 	isBadDirection = false;
+	badTimer = 0;
 }
 

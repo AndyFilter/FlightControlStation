@@ -52,6 +52,7 @@ class Plane
 
 		bool isBadDirection = false; // Used to simulate plane deviating from the path
 		bool wasBadSpotted = false; // UI thingy
+		float badTimer = 0;
 
 		Plane(Vec2 pos) : position(pos) { id = count++; GeneratePlaneIdentifier(); };
 		Plane(Vec2 pos, const char name[64]) : position(pos) { id = count++; strcpy_s(identifier, name); };

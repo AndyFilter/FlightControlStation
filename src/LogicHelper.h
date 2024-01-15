@@ -19,6 +19,8 @@ const char* const SURNAMES[NAMES_COUNT] = { u8"Włodarski", u8"Andrzejewski", u8
 struct Message {
 	std::string sender;
 	std::string message;
+
+	Message(const std::string& sender, const std::string& message) : sender(sender), message(message) {};
 };
 
 inline std::vector<Message> messages;
