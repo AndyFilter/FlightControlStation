@@ -6,23 +6,23 @@ using namespace std;
 #include "FlightPlan.h"
 
 void Plane::change_velocity(float mult) {
-	throw "Not yet implemented";
+	velocity = velocity * mult;
 }
 
 void Plane::set_altitude(string x__int) {
-	throw "Not yet implemented";
+	return;
 }
 
-float* Plane::get_pos() {
-	throw "Not yet implemented";
+Vec2 Plane::get_pos() {
+	return position;
 }
 
 float Plane::get_alt() {
-	throw "Not yet implemented";
+	return 1700 + (rand() % 500);
 }
 
-float Plane::get_velocity() {
-	throw "Not yet implemented";
+Vec2 Plane::get_velocity() {
+	return velocity;
 }
 
 void Plane::CorrectFlight()

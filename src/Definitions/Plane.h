@@ -24,9 +24,9 @@ class Plane
 
 		void change_velocity(float mult);
 		void set_altitude(std::string x__int);
-		float* get_pos();
+		Vec2 get_pos();
 		float get_alt();
-		float get_velocity();
+		Vec2 get_velocity();
 		void CorrectFlight();
 
 	private:
