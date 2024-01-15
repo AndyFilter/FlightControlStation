@@ -14,8 +14,8 @@ class EmergencySystem
 	public:
 		//FlightPlan* unnamed_FlightPlan;
 
-		void notify_emergency_services(FlightPlan fp);
-		void set_emergency_airport();
+		static void notify_emergency_services(FlightPlan fp);
+		//void set_emergency_airport();
 };
 
 #endif

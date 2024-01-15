@@ -5,10 +5,11 @@ using namespace std;
 #include "FlightPlan.h"
 
 void EmergencySystem::notify_emergency_services(FlightPlan fp) {
-	throw "Not yet implemented";
+	//throw "Not yet implemented";
+	return;
 }
 
-void EmergencySystem::set_emergency_airport() {
+/*void EmergencySystem::set_emergency_airport() {
 	throw "Not yet implemented";
-}
+}*/
 

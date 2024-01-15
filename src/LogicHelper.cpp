@@ -52,6 +52,8 @@ Plane* GetRandomAirbornPlane() {
 	while (!plane->isAirborn && iter < 200)
 		plane = planes[rand() % planes.size()];
 
+	
+
 	return plane;
 }
 
@@ -93,6 +95,7 @@ void SetPlaneMayday(Plane* p) {
 		selectedPlan = nullptr;
 		selectedPlane = nullptr;
 	}
+	ES.notify_emergency_services(*(p->flightPlan));
 
 	flightplans.erase(std::find(flightplans.begin(), flightplans.end(), p->flightPlan));
 	delete p->flightPlan;

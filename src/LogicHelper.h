@@ -7,6 +7,7 @@
 #include "Definitions/FlightPlan.h"
 #include "Definitions/Archive.h"
 #include "Definitions/RaportCreator.h"
+#include "Definitions/EmergencySystem.h"
 
 #include <vector>
 
@@ -35,6 +36,7 @@ inline FlightPlan* selectedPlan = nullptr;
 //inline std::vector<Pilot*> pilots;
 inline RaportCreator RCreator;
 inline Archive Arch;
+inline EmergencySystem ES;
 
 // delta time passed as milliseconds
 void UpdatePlanesPositions(float deltaTime);

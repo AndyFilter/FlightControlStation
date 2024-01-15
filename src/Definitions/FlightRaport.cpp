@@ -17,10 +17,10 @@ Raport::Raport(fp.plane->specifications), start(fp.startAirport), planed_destina
 }
 
 void FlightRaport::print(ofstream& output) {
-	output << "LOT" << endl << "Samolot: " << this->plane_specs << endl;;
+	output << "LOT" << endl << "Samolot: " << this->plane_specs << endl;
 	output << "Piloci: " << pilot_ID[0] << ", " << pilot_ID[1] << endl;
 	output << "Start:" << start << endl;
-	output << "Destynacja" << final_destination->identifier;
+	output << "Destynacja:" << final_destination->identifier;
 	if (final_destination != planed_destination) output << " (zmienione)";
 	output << endl;
 
