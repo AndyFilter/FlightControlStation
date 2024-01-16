@@ -312,11 +312,13 @@ int main()
 
 	assert(airports.size() >= 4);
 	assert(ImGui::GetIO().Ctx); // Make sure the UI was set-up correctly
+	
 
 	/*04.01.2024 KHan*/
 	Arch.set_data_output("test");
 	RCreator.set_Archive_link(&Arch);
-		
+	
+	assert(Arch.is_valid() == true);
 	while (!hasExited)
 	{
 		float dt = lastFrameRenderTime / 1000.f * !isRadarStopped;

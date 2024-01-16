@@ -117,7 +117,7 @@ void LogicTick(float deltaTime)
 		SetPlaneBadPath(GetRandomAirbornPlane());
 	}
 
-	if (!planes.empty() && fmodf(fixedRand, 10000) < 1) {
+	if (!planes.empty() && fmodf(fixedRand, 30000) < 1) {
 		// MAY-DAY signal (destroys the plane and the flightplan)
 		Plane* p = GetRandomAirbornPlane();
 		SetPlaneMayday(p);

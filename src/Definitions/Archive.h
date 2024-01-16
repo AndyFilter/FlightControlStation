@@ -23,6 +23,7 @@ class Archive
 		void set_data_output(std::string s);
 		void print();		//zmien w diag
 		void get(Raport* rap);//zmien w diag
+		bool is_valid() { return data_output.is_open(); }
 	private:
 		std::vector<Raport*> raportVector;
 		std::ofstream data_output;
